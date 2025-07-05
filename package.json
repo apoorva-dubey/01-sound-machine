@@ -1,0 +1,45 @@
+{
+  "name": "sound-machine",
+  "version": "1.0.0",
+  "description": "An interactive single-page application with 16 sound tiles that generate music and effects",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "test": "open test.html",
+    "test:run": "node run-tests.js",
+    "test:verify": "node verify-tests.js",
+    "dev": "python3 -m http.server 8000",
+    "serve": "npx http-server -p 8000 -o"
+  },
+  "keywords": [
+    "audio",
+    "music",
+    "web-audio-api",
+    "interactive",
+    "sound-effects",
+    "javascript",
+    "html5",
+    "css3"
+  ],
+  "author": "SoundMachine Developer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sound-machine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/sound-machine/issues"
+  },
+  "homepage": "https://github.com/yourusername/sound-machine#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+} 

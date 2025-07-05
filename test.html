@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundMachine Tests</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.2.0/mocha.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.7/chai.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sinon/15.2.0/sinon.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-header h1 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+        }
+        
+        .test-header p {
+            color: #666;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        #mocha {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 0;
+        }
+        
+        .test-container {
+            display: none;
+        }
+        
+        .test-results {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px;
+        }
+        
+        /* Mocha test styling improvements */
+        #mocha h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        #mocha h2 {
+            color: #555;
+            font-size: 1.5rem;
+            margin: 20px 0 10px 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+        
+        #mocha .suite {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        #mocha .test {
+            margin: 5px 0;
+            padding: 8px 15px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            border-left: 3px solid #28a745;
+        }
+        
+        #mocha .test.pass {
+            background: rgba(40, 167, 69, 0.1);
+            border-left-color: #28a745;
+        }
+        
+        #mocha .test.fail {
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: #dc3545;
+        }
+        
+        #mocha .test h3 {
+            color: #333;
+            font-size: 1rem;
+            margin: 0;
+        }
+        
+        #mocha .test .duration {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        #mocha .test .error {
+            color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        #mocha .stats {
+            background: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        #mocha .stats .passes {
+            color: #28a745;
+        }
+        
+        #mocha .stats .failures {
+            color: #dc3545;
+        }
+        
+        #mocha .stats .duration {
+            color: #ffc107;
+        }
+        
+        .test-summary {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-summary h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        
+        .test-summary ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .test-summary li {
+            padding: 5px 0;
+            color: #666;
+        }
+        
+        .test-summary li:before {
+            content: "✅ ";
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🧪 SoundMachine Test Suite</h1>
+        <p>Comprehensive testing for the interactive sound application</p>
+    </div>
+    
+    <div class="test-container" id="app">
+        <div class="container">
+            <header>
+                <h1>🎵 SoundMachine 🎵</h1>
+                <p>Click on any tile to play a sound!</p>
+            </header>
+            
+            <div class="sound-grid">
+                <!-- Row 1 -->
+                <div class="sound-tile" data-sound="claps">
+                    <span class="emoji">👏</span>
+                    <span class="label">Claps</span>
+                </div>
+                <div class="sound-tile" data-sound="laugh">
+                    <span class="emoji">😂</span>
+                    <span class="label">Laugh</span>
+                </div>
+                <div class="sound-tile" data-sound="sad">
+                    <span class="emoji">😢</span>
+                    <span class="label">Sad</span>
+                </div>
+                <div class="sound-tile" data-sound="xylophone">
+                    <span class="emoji">🎵</span>
+                    <span class="label">Xylophone</span>
+                </div>
+                
+                <!-- Row 2 -->
+                <div class="sound-tile" data-sound="rocket">
+                    <span class="emoji">🚀</span>
+                    <span class="label">Rocket</span>
+                </div>
+                <div class="sound-tile" data-sound="kids">
+                    <span class="emoji">👶</span>
+                    <span class="label">Kids</span>
+                </div>
+                <div class="sound-tile" data-sound="glass">
+                    <span class="emoji">🥂</span>
+                    <span class="label">Glass</span>
+                </div>
+                <div class="sound-tile" data-sound="coin">
+                    <span class="emoji">🪙</span>
+                    <span class="label">Coin</span>
+                </div>
+                
+                <!-- Row 3 -->
+                <div class="sound-tile" data-sound="drum">
+                    <span class="emoji">🥁</span>
+                    <span class="label">Drum</span>
+                </div>
+                <div class="sound-tile" data-sound="music">
+                    <span class="emoji">🎶</span>
+                    <span class="label">Music</span>
+                </div>
+                <div class="sound-tile" data-sound="spiral">
+                    <span class="emoji">🌀</span>
+                    <span class="label">Spiral</span>
+                </div>
+                <div class="sound-tile" data-sound="bulb">
+                    <span class="emoji">💡</span>
+                    <span class="label">Bulb</span>
+                </div>
+                
+                <!-- Row 4 -->
+                <div class="sound-tile" data-sound="whistle">
+                    <span class="emoji">📢</span>
+                    <span class="label">Whistle</span>
+                </div>
+                <div class="sound-tile" data-sound="ambulance">
+                    <span class="emoji">🚑</span>
+                    <span class="label">Ambulance</span>
+                </div>
+                <div class="sound-tile" data-sound="police">
+                    <span class="emoji">🚓</span>
+                    <span class="label">Police</span>
+                </div>
+                <div class="sound-tile" data-sound="mystery">
+                    <span class="emoji">❓</span>
+                    <span class="label">Mystery</span>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button id="stopAll" class="control-btn">🔇 Stop All</button>
+                <button id="volumeUp" class="control-btn">🔊 Volume Up</button>
+                <button id="volumeDown" class="control-btn">🔉 Volume Down</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="mocha"></div>
+    
+    <div class="test-summary">
+        <h3>📋 Test Coverage Summary</h3>
+        <ul>
+            <li>Initialization and setup validation</li>
+            <li>DOM structure and element verification</li>
+            <li>Sound generation for all 16 tiles</li>
+            <li>Event handling (clicks, keyboard shortcuts)</li>
+            <li>Volume control functionality</li>
+            <li>Sound management (play, stop, cleanup)</li>
+            <li>Audio context management</li>
+            <li>Error handling and edge cases</li>
+            <li>CSS classes and responsive design</li>
+            <li>Keyboard shortcuts for all tiles</li>
+        </ul>
+    </div>
+    
+    <script src="script.js"></script>
+    <script src="test-utils.js"></script>
+    <script>
+        // Configure Mocha
+        mocha.setup({
+            ui: 'bdd',
+            reporter: 'spec',
+            timeout: 5000,
+            slow: 100
+        });
+        
+        // Add test completion callback
+        mocha.checkLeaks();
+        
+        // Run tests when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Run tests
+            mocha.run(function(failures) {
+                // Add completion message
+                const summary = document.querySelector('.test-summary');
+                const completionMsg = document.createElement('div');
+                completionMsg.style.cssText = 'margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold;';
+                
+                if (failures === 0) {
+                    completionMsg.style.background = 'rgba(40, 167, 69, 0.1)';
+                    completionMsg.style.color = '#28a745';
+                    completionMsg.style.border = '2px solid #28a745';
+                    completionMsg.innerHTML = '🎉 All tests passed successfully!';
+                } else {
+                    completionMsg.style.background = 'rgba(220, 53, 69, 0.1)';
+                    completionMsg.style.color = '#dc3545';
+                    completionMsg.style.border = '2px solid #dc3545';
+                    completionMsg.innerHTML = `❌ ${failures} test(s) failed. Please check the details above.`;
+                }
+                
+                summary.appendChild(completionMsg);
+            });
+        });
+    </script>
+    <script src="tests.js"></script>
+</body>
+</html> 
