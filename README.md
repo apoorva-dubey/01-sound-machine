@@ -129,9 +129,10 @@ npm run serve
 ```
 
 ### Available Scripts
-- `npm start` - Open the main application
-- `npm test` - Run tests in browser
+- `npm start` - Open the main application (`frontend/index.html`)
+- `npm test` - Run tests in browser (`tests/test.html`)
 - `npm run test:run` - Run test runner script
+- `npm run test:verify` - Verify test setup and file structure
 - `npm run dev` - Start development server with Python
 - `npm run serve` - Start development server with http-server
 
@@ -148,15 +149,21 @@ npm run serve
 
 ```
 SoundMachine/
-├── index.html          # Main HTML file
-├── styles.css          # CSS styling
-├── script.js           # JavaScript functionality
-├── test.html           # Test runner HTML file
-├── tests.js            # Comprehensive test suite
-├── run-tests.js        # Test runner script
+├── frontend/           # Frontend application files
+│   ├── index.html      # Main HTML file
+│   ├── styles.css      # CSS styling
+│   ├── script.js       # JavaScript functionality
+│   └── assets/         # Asset directory
+├── tests/              # Test suite and utilities
+│   ├── test.html       # Test runner HTML file
+│   ├── tests.js        # Comprehensive test suite
+│   ├── test-utils.js   # Test utilities and helpers
+│   ├── run-tests.js    # Test runner script
+│   ├── verify-tests.js # Test setup verification
+│   └── TEST_RESULTS.md # Detailed test results
 ├── package.json        # Project configuration
 ├── README.md           # This file
-└── assets/             # Asset directory
+└── LICENSE             # MIT License
 ```
 
 ## Customization

@@ -2,12 +2,12 @@
   "name": "sound-machine",
   "version": "1.0.0",
   "description": "An interactive single-page application with 16 sound tiles that generate music and effects",
-  "main": "index.html",
+  "main": "frontend/index.html",
   "scripts": {
-    "start": "open index.html",
-    "test": "open test.html",
-    "test:run": "node run-tests.js",
-    "test:verify": "node verify-tests.js",
+    "start": "open frontend/index.html",
+    "test": "open tests/test.html",
+    "test:run": "node tests/run-tests.js",
+    "test:verify": "node tests/verify-tests.js",
     "dev": "python3 -m http.server 8000",
     "serve": "npx http-server -p 8000 -o"
   },

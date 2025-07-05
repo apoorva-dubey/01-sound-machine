@@ -3,97 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoundMachine</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>SoundMachine - Redirecting...</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+        .redirect-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎵 SoundMachine 🎵</h1>
-            <p>Click on any tile to play a sound!</p>
-        </header>
-        
-        <div class="sound-grid">
-            <!-- Row 1 -->
-            <div class="sound-tile" data-sound="claps">
-                <span class="emoji">👏</span>
-                <span class="label">Claps</span>
-            </div>
-            <div class="sound-tile" data-sound="laugh">
-                <span class="emoji">😂</span>
-                <span class="label">Laugh</span>
-            </div>
-            <div class="sound-tile" data-sound="sad">
-                <span class="emoji">😢</span>
-                <span class="label">Sad</span>
-            </div>
-            <div class="sound-tile" data-sound="xylophone">
-                <span class="emoji">🎵</span>
-                <span class="label">Xylophone</span>
-            </div>
-            
-            <!-- Row 2 -->
-            <div class="sound-tile" data-sound="rocket">
-                <span class="emoji">🚀</span>
-                <span class="label">Rocket</span>
-            </div>
-            <div class="sound-tile" data-sound="kids">
-                <span class="emoji">👶</span>
-                <span class="label">Kids</span>
-            </div>
-            <div class="sound-tile" data-sound="glass">
-                <span class="emoji">🥂</span>
-                <span class="label">Glass</span>
-            </div>
-            <div class="sound-tile" data-sound="coin">
-                <span class="emoji">🪙</span>
-                <span class="label">Coin</span>
-            </div>
-            
-            <!-- Row 3 -->
-            <div class="sound-tile" data-sound="drum">
-                <span class="emoji">🥁</span>
-                <span class="label">Drum</span>
-            </div>
-            <div class="sound-tile" data-sound="music">
-                <span class="emoji">🎶</span>
-                <span class="label">Music</span>
-            </div>
-            <div class="sound-tile" data-sound="spiral">
-                <span class="emoji">🌀</span>
-                <span class="label">Spiral</span>
-            </div>
-            <div class="sound-tile" data-sound="bulb">
-                <span class="emoji">💡</span>
-                <span class="label">Bulb</span>
-            </div>
-            
-            <!-- Row 4 -->
-            <div class="sound-tile" data-sound="whistle">
-                <span class="emoji">📢</span>
-                <span class="label">Whistle</span>
-            </div>
-            <div class="sound-tile" data-sound="ambulance">
-                <span class="emoji">🚑</span>
-                <span class="label">Ambulance</span>
-            </div>
-            <div class="sound-tile" data-sound="police">
-                <span class="emoji">🚓</span>
-                <span class="label">Police</span>
-            </div>
-            <div class="sound-tile" data-sound="mystery">
-                <span class="emoji">❓</span>
-                <span class="label">Mystery</span>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <button id="stopAll" class="control-btn">🔇 Stop All</button>
-            <button id="volumeUp" class="control-btn">🔊 Volume Up</button>
-            <button id="volumeDown" class="control-btn">🔉 Volume Down</button>
-        </div>
+    <div class="redirect-container">
+        <h1>🎵 SoundMachine</h1>
+        <div class="spinner"></div>
+        <p>Redirecting to the application...</p>
+        <p>If you're not redirected automatically, <a href="frontend/index.html">click here</a></p>
     </div>
     
-    <script src="script.js"></script>
+    <script>
+        // Redirect to the frontend application
+        setTimeout(() => {
+            window.location.href = 'frontend/index.html';
+        }, 2000);
+    </script>
 </body>
 </html> 

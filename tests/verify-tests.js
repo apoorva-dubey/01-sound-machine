@@ -7,12 +7,12 @@ console.log('🔍 Verifying SoundMachine Test Setup...\n');
 
 // Check if all required files exist
 const requiredFiles = [
-    'index.html',
-    'styles.css', 
-    'script.js',
-    'test.html',
-    'tests.js',
-    'test-utils.js',
+    'frontend/index.html',
+    'frontend/styles.css', 
+    'frontend/script.js',
+    'tests/test.html',
+    'tests/tests.js',
+    'tests/test-utils.js',
     'package.json',
     'README.md'
 ];
@@ -33,19 +33,19 @@ requiredFiles.forEach(file => {
 console.log('\n📋 Checking test file content:');
 
 // Check if test.html has proper Mocha setup
-const testHtmlContent = fs.readFileSync('test.html', 'utf8');
+const testHtmlContent = fs.readFileSync('tests/test.html', 'utf8');
 const hasMochaSetup = testHtmlContent.includes('mocha.setup') && 
                      testHtmlContent.includes('mocha.run');
 console.log(`  ${hasMochaSetup ? '✅' : '❌'} test.html has Mocha configuration`);
 
 // Check if tests.js has test suites
-const testsJsContent = fs.readFileSync('tests.js', 'utf8');
+const testsJsContent = fs.readFileSync('tests/tests.js', 'utf8');
 const hasTestSuites = testsJsContent.includes('describe(') && 
                      testsJsContent.includes('it(');
 console.log(`  ${hasTestSuites ? '✅' : '❌'} tests.js has test suites`);
 
 // Check if test-utils.js has utility functions
-const testUtilsContent = fs.readFileSync('test-utils.js', 'utf8');
+const testUtilsContent = fs.readFileSync('tests/test-utils.js', 'utf8');
 const hasTestUtils = testUtilsContent.includes('class TestUtils') && 
                     testUtilsContent.includes('createMockAudioContext');
 console.log(`  ${hasTestUtils ? '✅' : '❌'} test-utils.js has utility functions`);
@@ -67,19 +67,19 @@ requiredScripts.forEach(script => {
 console.log('\n🎵 Checking main application files:');
 
 // Check if index.html has proper structure
-const indexHtmlContent = fs.readFileSync('index.html', 'utf8');
+const indexHtmlContent = fs.readFileSync('frontend/index.html', 'utf8');
 const hasSoundGrid = indexHtmlContent.includes('sound-grid') && 
                     indexHtmlContent.includes('sound-tile');
 console.log(`  ${hasSoundGrid ? '✅' : '❌'} index.html has sound grid structure`);
 
 // Check if script.js has SoundMachine class
-const scriptJsContent = fs.readFileSync('script.js', 'utf8');
+const scriptJsContent = fs.readFileSync('frontend/script.js', 'utf8');
 const hasSoundMachineClass = scriptJsContent.includes('class SoundMachine') && 
                             scriptJsContent.includes('constructor');
 console.log(`  ${hasSoundMachineClass ? '✅' : '❌'} script.js has SoundMachine class`);
 
 // Check if styles.css has responsive design
-const stylesCssContent = fs.readFileSync('styles.css', 'utf8');
+const stylesCssContent = fs.readFileSync('frontend/styles.css', 'utf8');
 const hasResponsiveDesign = stylesCssContent.includes('@media') && 
                            stylesCssContent.includes('grid-template-columns');
 console.log(`  ${hasResponsiveDesign ? '✅' : '❌'} styles.css has responsive design`);
