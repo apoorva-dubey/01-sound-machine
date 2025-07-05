@@ -25,12 +25,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/sound-machine.git"
+    "url": "https://github.com/apoorva-dubey/01-sound-machine.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/sound-machine/issues"
+    "url": "https://github.com/apoorva-dubey/01-sound-machine/issues"
   },
-  "homepage": "https://github.com/yourusername/sound-machine#readme",
+  "homepage": "https://github.com/apoorva-dubey/01-sound-machine#readme",
   "devDependencies": {
     "http-server": "^14.1.1"
   },

@@ -1,5 +1,11 @@
 # 🎵 SoundMachine
 
+[![GitHub stars](https://img.shields.io/github/stars/apoorva-dubey/01-sound-machine?style=social)](https://github.com/apoorva-dubey/01-sound-machine/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/apoorva-dubey/01-sound-machine?style=social)](https://github.com/apoorva-dubey/01-sound-machine/network)
+[![GitHub issues](https://img.shields.io/github/issues/apoorva-dubey/01-sound-machine)](https://github.com/apoorva-dubey/01-sound-machine/issues)
+[![GitHub license](https://img.shields.io/github/license/apoorva-dubey/01-sound-machine)](https://github.com/apoorva-dubey/01-sound-machine/blob/main/LICENSE)
+[![Tests](https://img.shields.io/badge/tests-50%2B%20passing-brightgreen)](https://apoorva-dubey.github.io/01-sound-machine/test.html)
+
 A fun and interactive single-page application that lets you create music and sounds by clicking on tiles! Each tile has a unique emoji and plays a corresponding sound when clicked.
 
 ## Features
@@ -98,7 +104,10 @@ npm run test:run
 
 **Total Tests**: 50+ comprehensive tests using Mocha + Chai + Sinon
 
-## Development
+## 🚀 Quick Start
+
+### Live Demo
+🎵 **[Try SoundMachine Live](https://apoorva-dubey.github.io/01-sound-machine/)**
 
 ### Prerequisites
 - Node.js (version 14 or higher)
@@ -107,8 +116,8 @@ npm run test:run
 ### Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/sound-machine.git
-cd sound-machine
+git clone https://github.com/apoorva-dubey/01-sound-machine.git
+cd 01-sound-machine
 
 # Install dependencies (optional)
 npm install
