@@ -80,9 +80,67 @@ class SoundMachine {
             sound.volume = this.currentVolume;
             this.playingSounds.add(sound);
             
+            // Set up automatic stop after 12 seconds
+            const maxDuration = 12000; // 12 seconds in milliseconds
+            const stopTimeout = setTimeout(() => {
+                try {
+                    if (sound && this.playingSounds.has(sound)) {
+                        sound.stop();
+                        this.playingSounds.delete(sound);
+                        tile.classList.remove('playing');
+                        // Remove progress indicator
+                        const progressIndicator = tile.querySelector('.sound-progress');
+                        if (progressIndicator) {
+                            progressIndicator.remove();
+                        }
+                    }
+                } catch (e) {
+                    // Sound might have already ended
+                }
+            }, maxDuration);
+            
+            // Add progress indicator
+            const progressIndicator = document.createElement('div');
+            progressIndicator.className = 'sound-progress';
+            progressIndicator.style.cssText = `
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 3px;
+                background: linear-gradient(90deg, #667eea, #764ba2);
+                width: 100%;
+                border-radius: 0 0 15px 15px;
+                transition: width 0.1s linear;
+                z-index: 10;
+            `;
+            tile.appendChild(progressIndicator);
+            
+            // Animate progress bar
+            let startTime = Date.now();
+            const progressInterval = setInterval(() => {
+                if (!this.playingSounds.has(sound)) {
+                    clearInterval(progressInterval);
+                    return;
+                }
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(100, (elapsed / maxDuration) * 100);
+                progressIndicator.style.width = `${100 - progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                }
+            }, 100);
+            
             sound.onended = () => {
+                clearTimeout(stopTimeout); // Clear the timeout if sound ends naturally
+                clearInterval(progressInterval); // Clear progress interval
                 this.playingSounds.delete(sound);
                 tile.classList.remove('playing');
+                // Remove progress indicator
+                const progressIndicator = tile.querySelector('.sound-progress');
+                if (progressIndicator) {
+                    progressIndicator.remove();
+                }
             };
             
             sound.start();
@@ -104,9 +162,13 @@ class SoundMachine {
         });
         this.playingSounds.clear();
         
-        // Remove all playing classes
+        // Remove all playing classes and progress indicators
         document.querySelectorAll('.sound-tile.playing').forEach(tile => {
             tile.classList.remove('playing');
+            const progressIndicator = tile.querySelector('.sound-progress');
+            if (progressIndicator) {
+                progressIndicator.remove();
+            }
         });
     }
     

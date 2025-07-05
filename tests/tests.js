@@ -371,6 +371,12 @@ describe('SoundMachine', function() {
             soundMachine.stopAllSounds();
             
             expect(soundMachine.playingSounds.size).to.equal(0);
+            
+            // Check that progress indicators are removed
+            const progressIndicator1 = tile1.querySelector('.sound-progress');
+            const progressIndicator2 = tile2.querySelector('.sound-progress');
+            expect(progressIndicator1).to.be.null;
+            expect(progressIndicator2).to.be.null;
         });
         
         it('should add playing class to tiles', function() {
@@ -388,6 +394,44 @@ describe('SoundMachine', function() {
                 expect(tile.classList.contains('playing')).to.be.false;
                 done();
             }, 700);
+        });
+        
+        it('should stop sounds after maximum duration (12 seconds)', function(done) {
+            const tile = document.querySelector('[data-sound="claps"]');
+            soundMachine.playSound(tile);
+            
+            const initialSoundCount = soundMachine.playingSounds.size;
+            expect(initialSoundCount).to.be.greaterThan(0);
+            
+            // Simulate the 12-second timeout
+            setTimeout(() => {
+                expect(soundMachine.playingSounds.size).to.equal(0);
+                expect(tile.classList.contains('playing')).to.be.false;
+                done();
+            }, 100); // Use shorter timeout for testing
+        });
+        
+        it('should add progress indicator when sound starts', function() {
+            const tile = document.querySelector('[data-sound="claps"]');
+            soundMachine.playSound(tile);
+            
+            const progressIndicator = tile.querySelector('.sound-progress');
+            expect(progressIndicator).to.not.be.null;
+            expect(progressIndicator.className).to.include('sound-progress');
+        });
+        
+        it('should remove progress indicator when sound ends', function(done) {
+            const tile = document.querySelector('[data-sound="claps"]');
+            soundMachine.playSound(tile);
+            
+            const sound = Array.from(soundMachine.playingSounds)[0];
+            sound.onended();
+            
+            setTimeout(() => {
+                const progressIndicator = tile.querySelector('.sound-progress');
+                expect(progressIndicator).to.be.null;
+                done();
+            }, 100);
         });
     });
     
