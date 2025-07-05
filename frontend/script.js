@@ -143,7 +143,12 @@ class SoundMachine {
                 }
             };
             
-            sound.start();
+            // Start all oscillators if this is a multi-oscillator sound (like kids)
+            if (sound._allOscillators) {
+                sound._allOscillators.forEach(osc => osc.start());
+            } else {
+                sound.start();
+            }
         }
         
         // Remove playing class after animation
@@ -155,7 +160,18 @@ class SoundMachine {
     stopAllSounds() {
         this.playingSounds.forEach(sound => {
             try {
-                sound.stop();
+                // Stop all oscillators if this is a multi-oscillator sound
+                if (sound._allOscillators) {
+                    sound._allOscillators.forEach(osc => {
+                        try {
+                            osc.stop();
+                        } catch (e) {
+                            // Oscillator might have already ended
+                        }
+                    });
+                } else {
+                    sound.stop();
+                }
             } catch (e) {
                 // Sound might have already ended
             }
@@ -289,53 +305,120 @@ class SoundMachine {
     }
     
     createRocketSound() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators for a more realistic rocket launch sound
+        const oscillators = [];
+        const gainNodes = [];
         
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
+        // Create 3 oscillators for rocket engine sound
+        for (let i = 0; i < 3; i++) {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            const startTime = this.audioContext.currentTime + (i * 0.1);
+            
+            // Rocket engine frequencies (low rumble to higher frequencies)
+            const baseFreq = 50 + (i * 100);
+            const endFreq = 200 + (i * 150);
+            
+            oscillator.frequency.setValueAtTime(baseFreq, startTime);
+            oscillator.frequency.exponentialRampToValueAtTime(endFreq, startTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0.3 - (i * 0.1), startTime);
+            gainNode.gain.setValueAtTime(0.3 - (i * 0.1), startTime + 0.2);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.5);
+            
+            oscillators.push(oscillator);
+            gainNodes.push(gainNode);
+        }
         
-        oscillator.frequency.setValueAtTime(50, this.audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(200, this.audioContext.currentTime + 0.3);
+        // Return the first oscillator as the main one, but store all for cleanup
+        const mainOscillator = oscillators[0];
+        mainOscillator._allOscillators = oscillators;
+        mainOscillator._allGainNodes = gainNodes;
         
-        gainNode.gain.setValueAtTime(0.4, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
-        
-        return oscillator;
+        return mainOscillator;
     }
     
     createKidsSound() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators to simulate children's laughter and play sounds
+        const oscillators = [];
+        const gainNodes = [];
         
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
+        // Create 3-4 different "voices" for children
+        for (let i = 0; i < 4; i++) {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            // Different frequencies for different "children"
+            const baseFreq = 800 + (i * 200) + (Math.random() * 400);
+            const startTime = this.audioContext.currentTime + (i * 0.1);
+            
+            // Simulate laughter pattern
+            oscillator.frequency.setValueAtTime(baseFreq, startTime);
+            oscillator.frequency.setValueAtTime(baseFreq + 300, startTime + 0.1);
+            oscillator.frequency.setValueAtTime(baseFreq, startTime + 0.2);
+            oscillator.frequency.setValueAtTime(baseFreq + 200, startTime + 0.3);
+            oscillator.frequency.setValueAtTime(baseFreq, startTime + 0.4);
+            
+            gainNode.gain.setValueAtTime(0.1, startTime);
+            gainNode.gain.setValueAtTime(0.15, startTime + 0.1);
+            gainNode.gain.setValueAtTime(0.1, startTime + 0.2);
+            gainNode.gain.setValueAtTime(0.12, startTime + 0.3);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.5);
+            
+            oscillators.push(oscillator);
+            gainNodes.push(gainNode);
+        }
         
-        oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime);
-        oscillator.frequency.setValueAtTime(1200, this.audioContext.currentTime + 0.1);
-        oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime + 0.2);
-        oscillator.frequency.setValueAtTime(1200, this.audioContext.currentTime + 0.3);
+        // Return the first oscillator as the main one, but store all for cleanup
+        const mainOscillator = oscillators[0];
+        mainOscillator._allOscillators = oscillators;
+        mainOscillator._allGainNodes = gainNodes;
         
-        gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.4);
-        
-        return oscillator;
+        return mainOscillator;
     }
     
     createGlassSound() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators for a more realistic glass breaking sound
+        const oscillators = [];
+        const gainNodes = [];
         
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
+        // Create 4 oscillators for glass shattering effect
+        for (let i = 0; i < 4; i++) {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            const startTime = this.audioContext.currentTime + (i * 0.05);
+            
+            // Glass breaking frequencies (high to low)
+            const baseFreq = 2000 - (i * 300);
+            const endFreq = 500 - (i * 100);
+            
+            oscillator.frequency.setValueAtTime(baseFreq, startTime);
+            oscillator.frequency.exponentialRampToValueAtTime(endFreq, startTime + 0.3);
+            
+            gainNode.gain.setValueAtTime(0.25 - (i * 0.05), startTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+            
+            oscillators.push(oscillator);
+            gainNodes.push(gainNode);
+        }
         
-        oscillator.frequency.setValueAtTime(2000, this.audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(500, this.audioContext.currentTime + 0.2);
+        // Return the first oscillator as the main one, but store all for cleanup
+        const mainOscillator = oscillators[0];
+        mainOscillator._allOscillators = oscillators;
+        mainOscillator._allGainNodes = gainNodes;
         
-        gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.2);
-        
-        return oscillator;
+        return mainOscillator;
     }
     
     createCoinSound() {
@@ -356,19 +439,40 @@ class SoundMachine {
     }
     
     createDrumSound() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators for a more realistic drum sound
+        const oscillators = [];
+        const gainNodes = [];
         
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
+        // Create 3 oscillators for different drum components
+        for (let i = 0; i < 3; i++) {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            const startTime = this.audioContext.currentTime + (i * 0.02);
+            
+            // Different frequencies for different drum components
+            const baseFreq = [150, 80, 200][i];
+            const endFreq = [50, 30, 60][i];
+            
+            oscillator.frequency.setValueAtTime(baseFreq, startTime);
+            oscillator.frequency.exponentialRampToValueAtTime(endFreq, startTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.3 - (i * 0.1), startTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+            
+            oscillators.push(oscillator);
+            gainNodes.push(gainNode);
+        }
         
-        oscillator.frequency.setValueAtTime(150, this.audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(50, this.audioContext.currentTime + 0.1);
+        // Return the first oscillator as the main one, but store all for cleanup
+        const mainOscillator = oscillators[0];
+        mainOscillator._allOscillators = oscillators;
+        mainOscillator._allGainNodes = gainNodes;
         
-        gainNode.gain.setValueAtTime(0.4, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
-        
-        return oscillator;
+        return mainOscillator;
     }
     
     createMusicSound() {
@@ -426,56 +530,132 @@ class SoundMachine {
     }
     
     createWhistleSound() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators for a more realistic whistle sound
+        const oscillators = [];
+        const gainNodes = [];
         
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
+        // Create 2 oscillators for whistle harmonics
+        for (let i = 0; i < 2; i++) {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            const startTime = this.audioContext.currentTime + (i * 0.05);
+            
+            // Whistle pattern with harmonics
+            const baseFreq = 1000 + (i * 500);
+            oscillator.frequency.setValueAtTime(baseFreq, startTime);
+            oscillator.frequency.setValueAtTime(baseFreq + 200, startTime + 0.2);
+            oscillator.frequency.setValueAtTime(baseFreq, startTime + 0.4);
+            oscillator.frequency.setValueAtTime(baseFreq + 150, startTime + 0.6);
+            oscillator.frequency.setValueAtTime(baseFreq, startTime + 0.8);
+            
+            gainNode.gain.setValueAtTime(0.2 - (i * 0.1), startTime);
+            gainNode.gain.setValueAtTime(0.2 - (i * 0.1), startTime + 0.2);
+            gainNode.gain.setValueAtTime(0.2 - (i * 0.1), startTime + 0.4);
+            gainNode.gain.setValueAtTime(0.2 - (i * 0.1), startTime + 0.6);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.8);
+            
+            oscillators.push(oscillator);
+            gainNodes.push(gainNode);
+        }
         
-        oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime);
-        oscillator.frequency.setValueAtTime(1200, this.audioContext.currentTime + 0.2);
-        oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime + 0.4);
+        // Return the first oscillator as the main one, but store all for cleanup
+        const mainOscillator = oscillators[0];
+        mainOscillator._allOscillators = oscillators;
+        mainOscillator._allGainNodes = gainNodes;
         
-        gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.5);
-        
-        return oscillator;
+        return mainOscillator;
     }
     
     createAmbulanceSound() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators for a more realistic ambulance siren
+        const oscillators = [];
+        const gainNodes = [];
         
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
+        // Create 2 oscillators for the classic ambulance siren effect
+        for (let i = 0; i < 2; i++) {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            const startTime = this.audioContext.currentTime + (i * 0.1);
+            
+            // Classic ambulance siren pattern (high-low-high-low)
+            oscillator.frequency.setValueAtTime(800, startTime);
+            oscillator.frequency.setValueAtTime(600, startTime + 0.4);
+            oscillator.frequency.setValueAtTime(800, startTime + 0.8);
+            oscillator.frequency.setValueAtTime(600, startTime + 1.2);
+            oscillator.frequency.setValueAtTime(800, startTime + 1.6);
+            oscillator.frequency.setValueAtTime(600, startTime + 2.0);
+            
+            gainNode.gain.setValueAtTime(0.25, startTime);
+            gainNode.gain.setValueAtTime(0.25, startTime + 0.4);
+            gainNode.gain.setValueAtTime(0.25, startTime + 0.8);
+            gainNode.gain.setValueAtTime(0.25, startTime + 1.2);
+            gainNode.gain.setValueAtTime(0.25, startTime + 1.6);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 2.0);
+            
+            oscillators.push(oscillator);
+            gainNodes.push(gainNode);
+        }
         
-        oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
-        oscillator.frequency.setValueAtTime(600, this.audioContext.currentTime + 0.3);
-        oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime + 0.6);
-        oscillator.frequency.setValueAtTime(600, this.audioContext.currentTime + 0.9);
+        // Return the first oscillator as the main one, but store all for cleanup
+        const mainOscillator = oscillators[0];
+        mainOscillator._allOscillators = oscillators;
+        mainOscillator._allGainNodes = gainNodes;
         
-        gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 1.2);
-        
-        return oscillator;
+        return mainOscillator;
     }
     
     createPoliceSound() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
+        // Create multiple oscillators for a more realistic police siren
+        const oscillators = [];
+        const gainNodes = [];
         
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
+        // Create 2 oscillators for the classic police siren effect
+        for (let i = 0; i < 2; i++) {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            const startTime = this.audioContext.currentTime + (i * 0.05);
+            
+            // Classic police siren pattern (faster alternation than ambulance)
+            oscillator.frequency.setValueAtTime(1000, startTime);
+            oscillator.frequency.setValueAtTime(800, startTime + 0.2);
+            oscillator.frequency.setValueAtTime(1000, startTime + 0.4);
+            oscillator.frequency.setValueAtTime(800, startTime + 0.6);
+            oscillator.frequency.setValueAtTime(1000, startTime + 0.8);
+            oscillator.frequency.setValueAtTime(800, startTime + 1.0);
+            oscillator.frequency.setValueAtTime(1000, startTime + 1.2);
+            oscillator.frequency.setValueAtTime(800, startTime + 1.4);
+            
+            gainNode.gain.setValueAtTime(0.25, startTime);
+            gainNode.gain.setValueAtTime(0.25, startTime + 0.2);
+            gainNode.gain.setValueAtTime(0.25, startTime + 0.4);
+            gainNode.gain.setValueAtTime(0.25, startTime + 0.6);
+            gainNode.gain.setValueAtTime(0.25, startTime + 0.8);
+            gainNode.gain.setValueAtTime(0.25, startTime + 1.0);
+            gainNode.gain.setValueAtTime(0.25, startTime + 1.2);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 1.4);
+            
+            oscillators.push(oscillator);
+            gainNodes.push(gainNode);
+        }
         
-        oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime);
-        oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime + 0.2);
-        oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime + 0.4);
-        oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime + 0.6);
+        // Return the first oscillator as the main one, but store all for cleanup
+        const mainOscillator = oscillators[0];
+        mainOscillator._allOscillators = oscillators;
+        mainOscillator._allGainNodes = gainNodes;
         
-        gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.8);
-        
-        return oscillator;
+        return mainOscillator;
     }
     
     createMysterySound() {

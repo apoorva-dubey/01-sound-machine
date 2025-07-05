@@ -164,6 +164,69 @@ describe('SoundMachine', function() {
             expect(oscillatorStub.frequency.setValueAtTime).to.have.been.calledWith(800, 0.6);
             expect(oscillatorStub.frequency.setValueAtTime).to.have.been.calledWith(600, 0.9);
         });
+
+        it('should create realistic kids sound with multiple oscillators', function() {
+            const sound = soundMachine.createKidsSound();
+            expect(sound).to.be.an.instanceof(OscillatorNode);
+            expect(sound._allOscillators).to.be.an('array');
+            expect(sound._allOscillators).to.have.length(4);
+            expect(sound._allGainNodes).to.be.an('array');
+            expect(sound._allGainNodes).to.have.length(4);
+        });
+
+        it('should create realistic ambulance sound with multiple oscillators', function() {
+            const sound = soundMachine.createAmbulanceSound();
+            expect(sound).to.be.an.instanceof(OscillatorNode);
+            expect(sound._allOscillators).to.be.an('array');
+            expect(sound._allOscillators).to.have.length(2);
+            expect(sound._allGainNodes).to.be.an('array');
+            expect(sound._allGainNodes).to.have.length(2);
+        });
+
+        it('should create realistic police sound with multiple oscillators', function() {
+            const sound = soundMachine.createPoliceSound();
+            expect(sound).to.be.an.instanceof(OscillatorNode);
+            expect(sound._allOscillators).to.be.an('array');
+            expect(sound._allOscillators).to.have.length(2);
+            expect(sound._allGainNodes).to.be.an('array');
+            expect(sound._allGainNodes).to.have.length(2);
+        });
+
+        it('should create realistic drum sound with multiple oscillators', function() {
+            const sound = soundMachine.createDrumSound();
+            expect(sound).to.be.an.instanceof(OscillatorNode);
+            expect(sound._allOscillators).to.be.an('array');
+            expect(sound._allOscillators).to.have.length(3);
+            expect(sound._allGainNodes).to.be.an('array');
+            expect(sound._allGainNodes).to.have.length(3);
+        });
+
+        it('should create realistic whistle sound with multiple oscillators', function() {
+            const sound = soundMachine.createWhistleSound();
+            expect(sound).to.be.an.instanceof(OscillatorNode);
+            expect(sound._allOscillators).to.be.an('array');
+            expect(sound._allOscillators).to.have.length(2);
+            expect(sound._allGainNodes).to.be.an('array');
+            expect(sound._allGainNodes).to.have.length(2);
+        });
+
+        it('should create realistic glass sound with multiple oscillators', function() {
+            const sound = soundMachine.createGlassSound();
+            expect(sound).to.be.an.instanceof(OscillatorNode);
+            expect(sound._allOscillators).to.be.an('array');
+            expect(sound._allOscillators).to.have.length(4);
+            expect(sound._allGainNodes).to.be.an('array');
+            expect(sound._allGainNodes).to.have.length(4);
+        });
+
+        it('should create realistic rocket sound with multiple oscillators', function() {
+            const sound = soundMachine.createRocketSound();
+            expect(sound).to.be.an.instanceof(OscillatorNode);
+            expect(sound._allOscillators).to.be.an('array');
+            expect(sound._allOscillators).to.have.length(3);
+            expect(sound._allGainNodes).to.be.an('array');
+            expect(sound._allGainNodes).to.have.length(3);
+        });
     });
     
     describe('Event Handling', function() {
